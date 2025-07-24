@@ -7,8 +7,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,36 +14,75 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: MyHomePage(),
+      home: InitialWidget(),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
 
+class InitialWidget extends StatelessWidget {
+  String parentMessage = 'Hola mundo';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("My first App"),),
+      appBar: AppBar(
+        title: Text("My first app!"),
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
-              Square(message: 'Hello world!'),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: parentMessage,),
+              Square(message: 'Other message',),
             ],
           )
         ],
