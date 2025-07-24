@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-
-class Square extends StatelessWidget{
+class Square extends StatelessWidget {
   String message = '';
+  // Prop drilling
   Square({super.key, required this.message});
 
   @override
@@ -15,9 +15,7 @@ class Square extends StatelessWidget{
         borderRadius: BorderRadius.circular(8)
       ),
       child: Center(
-        child: Text(message, 
-        style: TextStyle( fontWeight: FontWeight.bold,
-         color: Colors.white),),
+        child: Text(message, style: TextStyle( fontWeight: FontWeight.bold, color: Colors.white),),
       ),
     );
   }
