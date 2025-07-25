@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'counter.dart';
 
 class Square extends StatelessWidget {
   String message = '';
@@ -15,7 +16,7 @@ class Square extends StatelessWidget {
         borderRadius: BorderRadius.circular(8)
       ),
       child: Center(
-        child: Text(message, style: TextStyle( fontWeight: FontWeight.bold, color: Colors.white),),
+        child: Counter(),
       ),
     );
   }
