@@ -24,14 +24,11 @@ class _CounterState extends State<Counter> {
   void _initCounter() {
     _counterTimer = Timer.periodic(Duration(seconds: 1), (_){
       if(_counter == 0) {
-        setState(() {
-          _counter = 10;
-        });
+        _counter = 10;
       } else {
-        setState(() {
-          --_counter;
-        });
+        --_counter;
       }
+      setState((){});
     });
   }
 
