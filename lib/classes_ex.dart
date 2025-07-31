@@ -7,98 +7,127 @@
  *  métodos para atacar y cambiar de arma.
  * */
 
+ // abstraccion
 abstract class Weapon {
   int _damage = 0;
   int _range = 0;
   int _speed = 0;
 
   Weapon(this._damage, this._range, this._speed);
+
   void attack();
+
 }
 
+// herencia
 class Sword extends Weapon {
-  Sword(int damage, int range, int speed) : super(damage, range, speed);
+
+  Sword(int damage, int range, int speed): super(damage, range, speed);
+
   @override
   void attack() {
     print('swosh!!!!!! 🤺🤺🤺🤺🤺🤺🤺');
   }
+
 }
 
+// herencia
 class MachineGun extends Weapon {
-  MachineGun(int damage, int range, int speed) : super(damage, range, speed);
+  MachineGun(int damage, int range, int speed): super(damage, range, speed);
+
   @override
   void attack() {
     print('TRRRRRRRR!!!!! 🔫🔫🔫🔫🔫🔫🔫🔫');
   }
 }
 
-class Rock extends Weapon {
-  Rock(int damage, int range, int speed) : super(damage, range, speed);
+class Bomb extends Weapon {
+  Bomb(int damage, int range, int speed): super(damage, range, speed);
+
   @override
   void attack() {
-    print('dust!!!!!!!! 🪨🪨🪨🪨🪨🪨🪨🪨🪨');
+    print("Boom!!!! 💥💥💥💥💥💥💥💥");
   }
 }
 
 
-class Player {
-  String _playerName = '';
-  int life = 0;
-  Weapon? _wp;
 
-  //constructor por defecto
-  Player(this._playerName, this.life);
 
-  // constructor nombrado con argumentos nombrados
-  Player.playerWeapon({required String playername, required int life, required Weapon wp}) {
-    this._playerName = playername;
-    this.life = life;
-    this._wp = wp;
-  }
+  class Player {
 
-  String get playerName => this._playerName;
+    // encapsulamiento
+    String _playerName = '';
+    int life = 0;
 
-  void attack() {
-    if (_wp != null) {
-      _wp!.attack();
-    } else {
-      // default
-      print('👊👊👊👊👊👊👊👊👊👊👊👊👊');
+    // polimorfismo
+    Weapon? _wp;
+
+    // constructor por defecto
+    Player(this._playerName, this.life);
+
+    // constructores nombrados con parametros nombrados
+    Player.playerWeapon({ required String playername, required int life, required Weapon wp}) {
+      this._playerName = playername;
+      this.life = life;
+      this._wp = wp;
     }
+
+    // getter
+    String get playerName => _playerName;
+    int get getLife => life;
+
+    // metodos
+
+    void attack() {
+      if(_wp != null) {
+        _wp!.attack();
+      } else {
+        // default attack!
+        print("👊👊👊👊👊👊👊👊👊👊👊👊👊");
+      }
+    }
+
+    void changeWeapon(Weapon newWeapon) {
+      _wp = newWeapon;
+    }
+
+    void walk() {
+      print('Walking!!!!! 🚶');
+    }
+
   }
 
-  void changeWeapon(Weapon newWeapon) {
-    this._wp = newWeapon;
-  }
+ void main() {
+  print('======== Initialize =======');
 
-  void walk() {
-    print('Walking!!!!! 🚶');
-  }
-
-}
-
-
-
-void main() {
-print('============ Initalize! =========');
-
-Player player1 = Player('Gsus', 100);
-  print('Player 1: ${player1.playerName}');
+  // instancia de un objeto
+  Player player1 = Player("Hector", 100);
+  print("Player1: ${player1.playerName}");
   player1.attack();
   player1.walk();
 
-  print('======================================================');
+  print('============== Initialize player 2 ================');
+
+  // definir dos armas
   Sword sw = Sword(2, 1, 15);
   MachineGun mg = MachineGun(100, 200, 1000);
-  Rock rock = Rock(10, 2, 1);
-  // invocando constructor nombrando con argumentos nombrados
-  Player player2 = Player.playerWeapon(playername: 'Dario', life: 100, wp: mg);
+  Bomb bm = Bomb(100, 350, 550);
 
-  print('Player 2: ${player2.playerName}');
-  player2.attack();
-  player2.changeWeapon(sw);
-  player2.attack();
-  player2.changeWeapon(rock);
-  player2.attack();
+  // definir el jugador 2 con el constructor nombrado
 
-}
+  Player player2 = Player.playerWeapon(playername: "Joseph", life: 100, wp: sw);
+  print("Player1: ${player2.playerName}");
+
+  player2.attack(); // debe de imprimir la espada!
+
+  player2.changeWeapon(mg);
+
+  player2.attack(); // debe de imprimir la metralleta!
+
+  // crear nueva arma, ejecutar changeWeapon y attack posteriormente!.
+
+  player2.changeWeapon(bm);
+
+  player2.attack(); // debe de imprimir explosion!
+
+ }
