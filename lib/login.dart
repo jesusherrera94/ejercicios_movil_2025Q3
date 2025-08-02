@@ -10,12 +10,13 @@ class _LoginState extends State<Login> {
     SnackBar snackBar = SnackBar(
       content: Text(message),
       action: SnackBarAction(
-        label: 'Undo | deshacer',
+        label: "Undo",
         onPressed: () {
-          print('Hola snackbar');
+          print("Revesar accion!");
         },
       ),
     );
+
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
@@ -26,25 +27,29 @@ class _LoginState extends State<Login> {
       body: Center(
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.5,
+          width: MediaQuery.of(context).size.width * 0.9,
           child: Card(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/img/login_icon.png", width: 120.0),
-                  SizedBox(height: 25),
+                  Image.asset('assets/img/login_icon.png', width: 125.0),
+                  SizedBox(height: 55.0),
                   ElevatedButton(
                     onPressed: () {
-                      _displaySnackbar(context, "Do Login");
+                      _displaySnackbar(context, "Do login!");
                     },
                     child: Text("Login"),
                   ),
                   SizedBox(height: 15),
                   GestureDetector(
                     onTap: () {
-                      _displaySnackbar(context, "Go to Register");
+                      _displaySnackbar(context, "Do register");
                     },
-                    child: Text("Register as new user"),
+                    child: Text(
+                      "Have a user? Register",
+                      style: TextStyle(decoration: TextDecoration.underline),
+                    ),
                   ),
                 ],
               ),
