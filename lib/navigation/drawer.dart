@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import '../screens/home.dart';
-import '../screens/profile.dart';
 import '../screens/store.dart';
+import '../screens/profile.dart';
 
 
 class MenuDrawer extends StatefulWidget {
 
   @override
   State<MenuDrawer> createState() => _MenuDrawerState();
-  
 }
 
 class _MenuDrawerState extends State<MenuDrawer> {
@@ -18,64 +17,63 @@ class _MenuDrawerState extends State<MenuDrawer> {
   final List<Widget> _screens = [
     HomeScreen(),
     StoreScreen(),
-    ProfileScreen()
+    ProfileScreen(),
   ];
 
-  void _onTapMenuItem(int newIndex) {
+  void _onTabMenuItem(int newIndex) {
     setState(() {
       _selectedIndex = newIndex;
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My menu drawer!'),
+        title: const Text("My super app!"),
         leading: Builder(builder: (context) {
           return IconButton(onPressed: () {
-            Scaffold.of(context).openDrawer(); // abrir el menu
+            Scaffold.of(context).openDrawer();
           }, icon: Icon(Icons.menu));
         }),
       ),
       body: _screens[_selectedIndex],
       drawer: Drawer(
         child: ListView(
-          padding: EdgeInsets.zero, // removiendo padding
+          padding: EdgeInsets.zero,
           children: [
-            DrawerHeader(child: Text('Drawer Header!'),
+            DrawerHeader(child: Text("Drawer Header"),
             decoration: BoxDecoration(color: Colors.blueAccent),
             ),
             ListTile(
-              title: Text('Home'),
+              title: Text("Home"),
               selected: _selectedIndex == 0,
               onTap: () {
-                _onTapMenuItem(0);
-                Navigator.pop(context); // cerrar el menu drawer
+                _onTabMenuItem(0);
+                Navigator.pop(context); // cerrar el menu drawer!
               },
             ),
             ListTile(
-              title: Text('Store'),
+              title: Text("Store"),
               selected: _selectedIndex == 1,
               onTap: () {
-                _onTapMenuItem(1);
-                Navigator.pop(context); // cerrar el menu drawer
+                _onTabMenuItem(1);
+                Navigator.pop(context); // cerrar el menu drawer!
               },
             ),
             ListTile(
-              title: Text('Profile'),
+              title: Text("Profile"),
               selected: _selectedIndex == 2,
               onTap: () {
-                _onTapMenuItem(2);
-                Navigator.pop(context); // cerrar el menu drawer
+                _onTabMenuItem(2);
+                Navigator.pop(context); // cerrar el menu drawer!
               },
-            )
+            ),
           ],
         ),
       ),
     );
-  }
-  
+  }  
+
+
 }
