@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'square.dart';
 import 'screens/login.dart';
+import './navigation/bottom_tab_bar.dart';
+import './navigation/tab_controller.dart';
+import './navigation/drawer.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +18,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Login(),
+      home: MenuDrawer(),
     );
   }
 }
