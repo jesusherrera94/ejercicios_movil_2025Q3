@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
+class Register extends StatefulWidget {
   @override
-  State<Login> createState() => _LoginState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _LoginState extends State<Login> {
-  
-  void _goToMainApp( BuildContext context) {
+class _RegisterState extends State<Register> {
+
+
+   void _goToMainApp( BuildContext context) {
+    _displaySnackbar(context, "User regristed successfully!");
     Navigator.pushNamed(context, 'main-app');
   }
 
-  void _goToRegister(BuildContext context) {
-    Navigator.pushNamed(context, 'register');
-  }
+  void _displaySnackbar(BuildContext context, String message) {
+    SnackBar snackBar = SnackBar(
+      content: Text(message),
+      action: SnackBarAction(
+        label: "Undo",
+        onPressed: () {
+          print("Revesar accion!");
+        },
+      ),
+    );
 
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: Text("Create user")),
       body: Center(
         child: SizedBox(
           height: MediaQuery.of(context).size.height * 0.5,
@@ -35,17 +46,7 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       _goToMainApp(context);
                     },
-                    child: Text("Login"),
-                  ),
-                  SizedBox(height: 15),
-                  GestureDetector(
-                    onTap: () {
-                      _goToRegister(context);
-                    },
-                    child: Text(
-                      "Have a user? Register",
-                      style: TextStyle(decoration: TextDecoration.underline),
-                    ),
+                    child: Text("Register"),
                   ),
                 ],
               ),
