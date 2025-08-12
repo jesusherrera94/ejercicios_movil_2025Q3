@@ -8,11 +8,46 @@ class StoreScreen extends StatefulWidget {
 }
 
 class _StoreScreenState extends State<StoreScreen> {
-
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('StoreScreen!'),
+    return GridView.count(
+      crossAxisCount: 4,
+      crossAxisSpacing: 5,
+      mainAxisSpacing: 10,
+      children: [
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+        Container(
+          color: Colors.amber,
+          child: Center(child: Text("Hola mundo!1")),
+        ),
+      ],
     );
   }
 }
