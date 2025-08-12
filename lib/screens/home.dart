@@ -53,6 +53,14 @@ class _HomeScreenState extends State<HomeScreen> {
       charge: 11.99,
       userId: 'user123',
     ),
+    Subscription(
+      id: '6',
+      platformName: 'Github Copilot',
+      renovationDate: 2047483635,
+      renovationCycle: Period.YEARLY,
+      charge: 100.00,
+      userId: 'user123',
+    ),
   ];
 
   List<Subscription> _filteredSubscriptions = [];
@@ -62,7 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_selectedFilter == null) {
       for (final subscription in _subscriptions) {
         subscriptionWidget.add(
-          SubscriptionItem(subscriptionElement: subscription),
+          SubscriptionItem(subscriptionItem: subscription),
         );
       }
     } else {
@@ -71,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }).toList();
       for (final subscription in _filteredSubscriptions) {
         subscriptionWidget.add(
-          SubscriptionItem(subscriptionElement: subscription),
+          SubscriptionItem(subscriptionItem: subscription),
         );
       }
       setState(() {});

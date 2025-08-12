@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-
 import '../models/subscription.dart';
 import '../utils/time_utils.dart';
 
 class SubscriptionItem extends StatelessWidget {
-  final Subscription subscriptionElement;
-  const SubscriptionItem({super.key, required this.subscriptionElement});
-
+  final Subscription subscriptionItem;
+  const SubscriptionItem({super.key, required this.subscriptionItem});
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(subscriptionElement.icon),
+        leading: Icon(subscriptionItem.icon),
         title: Row(
           children: [
-            Text(subscriptionElement.platformName),
+            Text(subscriptionItem.platformName),
             SizedBox(width: 5),
             Text(
-              "\$ ${subscriptionElement.charge}",
+              "\$ ${subscriptionItem.charge}",
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.green,
@@ -30,17 +28,19 @@ class SubscriptionItem extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("Period", style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(subscriptionElement.renovationCycle.name),
+                Text("Period:", style: TextStyle(fontWeight: FontWeight.bold)),
+                SizedBox(width: 5),
+                Text(subscriptionItem.renovationCycle.name),
               ],
             ),
             Row(
               children: [
                 Text(
-                  "Next renovation date: ",
+                  "Next renovation date:",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(timestampToDatestring(subscriptionElement.renovationDate)),
+                SizedBox(width: 5),
+                Text(timestampToDatestring(subscriptionItem.renovationDate)),
               ],
             ),
           ],
