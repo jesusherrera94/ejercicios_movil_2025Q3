@@ -23,10 +23,14 @@ class _MyBottomTabBarState extends State<MyBottomTabBar> {
     });
   }
 
-  Widget? getFloatinActionButton(int index) {
+    Widget? getFloatinActionButton(int index) {
     // si el indice es 0(equivalente a home) retorna el Floating action button, sino retorna nulo
     return index == 0
-        ? FloatingActionButton(onPressed: () {}, child: Icon(Icons.add))
+        ? FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.blueAccent,
+          shape: CircleBorder(), 
+          child: Icon(Icons.add, color: Colors.white,))
         : null;
   }
 
