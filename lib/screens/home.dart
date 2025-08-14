@@ -11,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // listado temporal
+  Period? _selectedFilter;
   final List<Subscription> _subscriptions = [
     Subscription(
       id: '1',
@@ -62,16 +63,87 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  List<Subscription> _filteredSubscriptions = [];
+
   List<Widget> _renderItems() {
-    List<Widget> subcriptionWidgets = [];
-    for (final subscription in _subscriptions) {
-      subcriptionWidgets.add(SubscriptionItem(subscriptionItem: subscription));
+    List<Widget> subscriptionWidget = [];
+    if (_selectedFilter == null) { // no hay filtros seleccionados
+      for (final subscription in _subscriptions) {
+        subscriptionWidget.add(
+          SubscriptionItem(subscriptionItem: subscription),
+        );
+      }
+    } else { // algun fultro se selecciono
+      _filteredSubscriptions = _subscriptions.where((subscription) {
+        return subscription.renovationCycle == _selectedFilter;
+      }).toList();
+      for (final subscription in _filteredSubscriptions) {
+        subscriptionWidget.add(
+          SubscriptionItem(subscriptionItem: subscription),
+        );
+      }
+      setState(() {});
     }
-    return subcriptionWidgets;
+    return subscriptionWidget;
+  }
+
+  void _onApplyFilters(Period? period) {
+    setState(() {
+      _selectedFilter = period;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: ListView(children: _renderItems()));
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            if (_selectedFilter != null)
+              IconButton(
+                onPressed: () {
+                  _onApplyFilters(null);
+                },
+                icon: Icon(Icons.cancel),
+              ),
+            ElevatedButton(
+              onPressed: () {
+                _onApplyFilters(Period.DAILY);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _selectedFilter == Period.DAILY
+                    ? Colors.blueAccent
+                    : Colors.grey,
+              ),
+              child: const Text("Daily"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _onApplyFilters(Period.MONTHLY);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _selectedFilter == Period.MONTHLY
+                    ? Colors.blueAccent
+                    : Colors.grey,
+              ),
+              child: const Text("Monthly"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                _onApplyFilters(Period.YEARLY);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _selectedFilter == Period.YEARLY
+                    ? Colors.blueAccent
+                    : Colors.grey,
+              ),
+              child: const Text("Yearly"),
+            ),
+          ],
+        ),
+        Expanded(child: ListView(children: _renderItems())),
+      ],
+    );
   }
 }
