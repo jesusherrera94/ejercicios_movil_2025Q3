@@ -67,13 +67,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<Widget> _renderItems() {
     List<Widget> subscriptionWidget = [];
-    if (_selectedFilter == null) {
+    if (_selectedFilter == null) { // no hay filtros seleccionados
       for (final subscription in _subscriptions) {
         subscriptionWidget.add(
           SubscriptionItem(subscriptionItem: subscription),
         );
       }
-    } else {
+    } else { // algun fultro se selecciono
       _filteredSubscriptions = _subscriptions.where((subscription) {
         return subscription.renovationCycle == _selectedFilter;
       }).toList();
@@ -100,12 +100,13 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            IconButton(
-              onPressed: () {
-                _onApplyFilters(null);
-              },
-              icon: Icon(Icons.cancel),
-            ),
+            if (_selectedFilter != null)
+              IconButton(
+                onPressed: () {
+                  _onApplyFilters(null);
+                },
+                icon: Icon(Icons.cancel),
+              ),
             ElevatedButton(
               onPressed: () {
                 _onApplyFilters(Period.DAILY);
