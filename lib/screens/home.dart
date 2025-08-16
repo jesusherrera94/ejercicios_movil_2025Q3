@@ -61,6 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
       charge: 100.00,
       userId: 'user123',
     ),
+    Subscription(
+      id: '6',
+      platformName: 'Github Copilot',
+      renovationDate: 2047483635,
+      renovationCycle: Period.YEARLY,
+      charge: 100.00,
+      userId: 'user123',
+    ),
   ];
 
   List<Subscription> _filteredSubscriptions = [];
