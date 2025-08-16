@@ -10,6 +10,7 @@ class Subscription {
   late double _charge; // dinero
   late String _userId; // relacion a la tabla de usuarios
   IconData? _icon;
+  String? _image;
 
   Subscription({
     required String id,
@@ -17,14 +18,16 @@ class Subscription {
     required int renovationDate,
     required Period renovationCycle,
     required double charge,
-    required String userId
-  }){
+    required String userId,
+    String? image,
+  }) {
     _id = id;
     _platformName = platformName;
     _renovationDate = renovationDate;
     _renovationCycle = renovationCycle;
     _charge = charge;
     _userId = userId;
+    _image = image;
   }
 
   String get id => _id;
@@ -34,5 +37,6 @@ class Subscription {
   double get charge => _charge;
   String get userId => _userId;
   IconData? get icon =>  _icon ??  Icons.calendar_view_month;
-  
+  String? get image => _image;
+
 }
