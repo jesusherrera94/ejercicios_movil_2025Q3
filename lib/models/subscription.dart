@@ -20,7 +20,7 @@ class Subscription {
     required double charge,
     required String userId,
     String? image,
-  }) {
+  }){
     _id = id;
     _platformName = platformName;
     _renovationDate = renovationDate;
@@ -38,5 +38,5 @@ class Subscription {
   String get userId => _userId;
   IconData? get icon =>  _icon ??  Icons.calendar_view_month;
   String? get image => _image;
-
+  
 }
