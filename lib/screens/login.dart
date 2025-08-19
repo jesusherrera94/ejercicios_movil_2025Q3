@@ -1,13 +1,41 @@
 import 'package:flutter/material.dart';
-
+import '../adapters/local_storage.dart';
 class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+
+  final LocalStorage _localStorage = LocalStorage();
+  bool _hasLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserDetails(context);
+  }
+
+  Future<void> loadUserDetails(BuildContext context) async {
+    bool loginStatus = await _localStorage.getLoginStatus();
+    setState(() {
+      _hasLoaded = true;
+    });
+    if (loginStatus) {
+      _goToMainApp(context);
+    }
+  }
+
+  Future<void> doLogin(BuildContext context) async {
+    try {
+      await _localStorage.setLoginStatus(true);
+      _goToMainApp(context);
+    } catch (e) {
+      print("An error has occurred trying to login!: $e");
+    }
+  }
   
-  void _goToMainApp( BuildContext context) {
+  void _goToMainApp(BuildContext context) {
     Navigator.pushNamed(context, 'main-app');
   }
 
@@ -18,6 +46,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_hasLoaded){ return Scaffold( body: Center(child: CircularProgressIndicator(),),);}
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
       body: Center(
@@ -33,7 +62,7 @@ class _LoginState extends State<Login> {
                   SizedBox(height: 55.0),
                   ElevatedButton(
                     onPressed: () {
-                      _goToMainApp(context);
+                      doLogin(context);
                     },
                     child: Text("Login"),
                   ),
