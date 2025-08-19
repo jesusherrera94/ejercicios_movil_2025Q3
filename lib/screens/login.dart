@@ -6,14 +6,15 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  LocalStorage _localStorage = LocalStorage();
+
+  final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
+
   @override
   void initState() {
     super.initState();
     loadUserDetails(context);
   }
-
 
   Future<void> loadUserDetails(BuildContext context) async {
     bool loginStatus = await _localStorage.getLoginStatus();
@@ -34,7 +35,7 @@ class _LoginState extends State<Login> {
     }
   }
   
-  void _goToMainApp( BuildContext context) {
+  void _goToMainApp(BuildContext context) {
     Navigator.pushNamed(context, 'main-app');
   }
 
