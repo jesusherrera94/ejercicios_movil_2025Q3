@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/subscription.dart';
+import '../widgets/store_items.dart';
 
 class StoreScreen extends StatefulWidget {
   const StoreScreen({super.key});
@@ -10,8 +11,7 @@ class StoreScreen extends StatefulWidget {
 
 class _StoreScreenState extends State<StoreScreen> {
 
-
-final List<Subscription> _subscriptions = [
+  final List<Subscription> _subscriptions = [
     Subscription(
       id: '1',
       platformName: 'Netflix',
@@ -78,14 +78,11 @@ final List<Subscription> _subscriptions = [
   ];
 
   List<Widget> _renderItems() {
-    List<Widget> storeSubscriptionItem = [];
-    for(final subscription in _subscriptions) {
-        storeSubscriptionItem.add(Container(
-          color: Colors.amber,
-          child: Center(child: Text(subscription.platformName)),
-        ),);
+    List<Widget> storeSubscriptionItems = [];
+    for( final subscription in _subscriptions) {
+      storeSubscriptionItems.add(StoreItems(subscription: subscription));
     }
-    return storeSubscriptionItem;
+    return storeSubscriptionItems;
   }
 
   @override
