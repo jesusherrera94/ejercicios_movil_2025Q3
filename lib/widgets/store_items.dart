@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/subscription.dart';
 
-class StoreItems extends StatelessWidget {
+class StoreItem extends StatelessWidget {
   final Subscription subscription;
-
-  const StoreItems({super.key, required this.subscription});
+  const StoreItem({super.key, required this.subscription});
 
   @override
   Widget build(BuildContext context) {
@@ -12,18 +11,18 @@ class StoreItems extends StatelessWidget {
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(16)), // Match card's top border
+            borderRadius: BorderRadiusGeometry.vertical(top: Radius.circular(14)),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.08,
-              width: MediaQuery.of(context).size.width * 0.6,
+              height:
+                  MediaQuery.of(context).size.height *
+                  0.08, // tomar el 8% del tamaño de la pantalla
+              width: double
+                  .infinity, // abarca todo el espacio disponible a lo ancho
               child: Image.asset(
                 subscription.image ?? 'assets/img/default.jpg',
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) {
-                  return Image.asset(
-                    'assets/img/default.jpg',
-                    fit: BoxFit.cover,
-                  );
+                  return Icon(Icons.broken_image);
                 },
               ),
             ),
@@ -47,12 +46,17 @@ class StoreItems extends StatelessWidget {
               ),
             ],
           ),
-          Text('Cycle: ${subscription.renovationCycle.name}'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Cycle:"),
+              SizedBox(width: 5),
+              Text(subscription.renovationCycle.name),
+            ],
+          ),
           IconButton(
-            icon: const Icon(Icons.add_shopping_cart, color: Colors.blueAccent,),
-            onPressed: () {
-              // Handle add to cart action
-            },
+            onPressed: () {},
+            icon: Icon(Icons.add_shopping_cart, color: Colors.blueAccent),
           ),
         ],
       ),
