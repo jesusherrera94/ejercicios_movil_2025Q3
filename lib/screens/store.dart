@@ -80,7 +80,7 @@ class _StoreScreenState extends State<StoreScreen> {
   List<Widget> _renderItems() {
     List<Widget> storeSubscriptionItems = [];
     for( final subscription in _subscriptions) {
-      storeSubscriptionItems.add(StoreItems(subscription: subscription));
+      storeSubscriptionItems.add(StoreItem(subscription: subscription));
     }
     return storeSubscriptionItems;
   }
