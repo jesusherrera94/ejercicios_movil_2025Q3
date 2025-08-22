@@ -18,4 +18,33 @@ class User {
     required this.principalInterest,
     this.uid
   });
+
+  // para salvar en el local storage
+  String toMapString() {
+    return """ 
+        {
+        "id": \"$id\",
+        "username": \"$username\",
+        "fullname": \"$fullname\",
+        "email": \"$email\",
+        "principalInterest": \"$principalInterest\",
+        "profilePicture": \"$profilePicture\",
+        "uid": \"$uid\"
+        }
+    """;
+  }
+
+  // convertir de map a objeto
+  factory User.fromMap(Map<String, dynamic> map) {
+    return User(
+      id: map["id"] ?? '',
+      username: map["username"] ?? '',
+      fullname: map["fullname"] ?? '',
+      email: map["email"] ?? '',
+      password: map["password"] ?? '',
+      principalInterest: map["principalInterest"] ?? '',
+      profilePicture: map["profilePicture"] ?? '',
+      uid: map["uid"] ?? ''
+      );
+      }
 }

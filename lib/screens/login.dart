@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'dart:convert' as convert;
+
 import '../adapters/local_storage.dart';
+import '../adapters/dio_adapter.dart';
+import '../adapters/http_adapter.dart';
+
 class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-
   final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
+  DioAdapter _dioAdapter = DioAdapter();
+  HttpAdapter _httpAdapter = HttpAdapter();
 
   @override
   void initState() {
@@ -17,12 +23,32 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> loadUserDetails(BuildContext context) async {
-    bool loginStatus = await _localStorage.getLoginStatus();
-    setState(() {
-      _hasLoaded = true;
-    });
-    if (loginStatus) {
-      _goToMainApp(context);
+    try {
+      bool loginStatus = await _localStorage.getLoginStatus();
+      dynamic response = await _dioAdapter.getRequest(
+        'https://official-joke-api.appspot.com/random_ten',
+      );
+      dynamic responseHttp = await _httpAdapter.getRequest(
+        'official-joke-api.appspot.com',
+        '/random_ten',
+      );
+      List<dynamic> responseMap = convert.jsonDecode(responseHttp);
+      String dioResponseStr = convert.jsonEncode(response);
+      print('=======>: ${response[0]["setup"]}');
+      print('========>: $responseHttp');
+      print('==========>: ${responseMap[0]}');
+      print(
+        '${response.runtimeType} : ${responseHttp.runtimeType} : ${responseMap.runtimeType} : ${dioResponseStr.runtimeType}',
+      );
+      print('=========> $dioResponseStr');
+      setState(() {
+        _hasLoaded = true;
+      });
+      if (loginStatus) {
+        _goToMainApp(context);
+      }
+    } catch (e) {
+      print("An error has occurred trying to load user on login: $e");
     }
   }
 
@@ -34,7 +60,7 @@ class _LoginState extends State<Login> {
       print("An error has occurred trying to login!: $e");
     }
   }
-  
+
   void _goToMainApp(BuildContext context) {
     Navigator.pushNamed(context, 'main-app');
   }
@@ -43,10 +69,11 @@ class _LoginState extends State<Login> {
     Navigator.pushNamed(context, 'register');
   }
 
-
   @override
   Widget build(BuildContext context) {
-    if (!_hasLoaded){ return Scaffold( body: Center(child: CircularProgressIndicator(),),);}
+    if (!_hasLoaded) {
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       appBar: AppBar(title: Text("Login")),
       body: Center(
