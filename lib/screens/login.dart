@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../adapters/local_storage.dart';
+import '../adapters/dio_adapter.dart';
+
+
 class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
@@ -9,6 +12,7 @@ class _LoginState extends State<Login> {
 
   final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
+  final DioAdapter _dioAdapter = DioAdapter();
 
   @override
   void initState() {
@@ -18,6 +22,12 @@ class _LoginState extends State<Login> {
 
   Future<void> loadUserDetails(BuildContext context) async {
     bool loginStatus = await _localStorage.getLoginStatus();
+    dynamic response = await _dioAdapter.getRequest('https://official-joke-api.appspot.com/random_ten');
+
+    print('=====================> ${response}');
+
+    print("RUNTIME TYPE =======================> ${response.runtimeType}");
+
     setState(() {
       _hasLoaded = true;
     });
