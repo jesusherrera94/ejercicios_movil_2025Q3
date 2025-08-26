@@ -14,7 +14,7 @@ class _LoginState extends State<Login> {
   final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
   final DioAdapter _dioAdapter = DioAdapter();
-  HttpAdapter _httpAdapter = HttpAdapter();
+  final HttpAdapter _httpAdapter = HttpAdapter();
 
   @override
   void initState() {
