@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 
+
 class DioAdapter {
+
   late Dio _dio;
+
   DioAdapter() {
     _dio = Dio();
   }
