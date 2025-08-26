@@ -13,7 +13,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
-  DioAdapter _dioAdapter = DioAdapter();
+  final DioAdapter _dioAdapter = DioAdapter();
   HttpAdapter _httpAdapter = HttpAdapter();
 
   @override
@@ -34,12 +34,10 @@ class _LoginState extends State<Login> {
       );
       List<dynamic> responseMap = convert.jsonDecode(responseHttp);
       String dioResponseStr = convert.jsonEncode(response);
-      print('=======>: ${response[0]["setup"]}');
+      print('=====================> ${response}');
       print('========>: $responseHttp');
       print('==========>: ${responseMap[0]}');
-      print(
-        '${response.runtimeType} : ${responseHttp.runtimeType} : ${responseMap.runtimeType} : ${dioResponseStr.runtimeType}',
-      );
+      print("RUNTIME TYPE =======================> ${response.runtimeType} : ${responseHttp.runtimeType} : ${responseMap.runtimeType} : ${dioResponseStr.runtimeType}");
       print('=========> $dioResponseStr');
       setState(() {
         _hasLoaded = true;
