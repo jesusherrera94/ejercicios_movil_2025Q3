@@ -47,4 +47,15 @@ class User {
       uid: map["uid"] ?? ''
       );
       }
+      
+  Map<String, dynamic> toMap(){
+    return {
+      "username": username,
+      "fullname": fullname,
+      "email": email,
+      "password": password,
+      "principalInterest": principalInterest,
+      "profilePicture": profilePicture
+    };
+  }
 }
