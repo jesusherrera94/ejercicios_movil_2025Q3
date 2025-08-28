@@ -16,39 +16,38 @@ class User {
     required this.email,
     required this.password,
     required this.principalInterest,
-    this.uid
+    this.uid,
   });
 
-  // para salvar en el local storage
+  // nos va a servir para almacenar la informacion en el localstorage
   String toMapString() {
-    return """ 
-        {
-        "id": \"$id\",
-        "username": \"$username\",
-        "fullname": \"$fullname\",
-        "email": \"$email\",
-        "principalInterest": \"$principalInterest\",
-        "profilePicture": \"$profilePicture\",
-        "uid": \"$uid\"
-        }
-    """;
+    return """
+      {
+        "id": "$id",
+        "username": "$username",
+        "fullname": "$fullname",
+        "email": "$email",
+        "principalInterest": "$principalInterest",
+        "profilePicture": "$profilePicture",
+        "uid": "$uid"
+      }
+      """;
   }
 
-  // convertir de map a objeto
+  // convertir de map a instancia de esta clase
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map["id"] ?? '',
-      username: map["username"] ?? '',
+      username: map["id"] ?? '',
       fullname: map["fullname"] ?? '',
       email: map["email"] ?? '',
       password: map["password"] ?? '',
       principalInterest: map["principalInterest"] ?? '',
       profilePicture: map["profilePicture"] ?? '',
-      uid: map["uid"] ?? ''
-      );
-      }
-      
-  Map<String, dynamic> toMap(){
+      uid: map["uid"] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
       "username": username,
       "fullname": fullname,
@@ -58,4 +57,6 @@ class User {
       "profilePicture": profilePicture
     };
   }
+
+
 }
