@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'dart:convert' as convert;
-
 import '../adapters/local_storage.dart';
 import '../adapters/dio_adapter.dart';
 import '../adapters/http_adapter.dart';
+import 'dart:convert' as convert;
 
 class Login extends StatefulWidget {
   @override
@@ -23,30 +22,34 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> loadUserDetails(BuildContext context) async {
-    try {
-      bool loginStatus = await _localStorage.getLoginStatus();
-      dynamic response = await _dioAdapter.getRequest(
-        'https://official-joke-api.appspot.com/random_ten',
-      );
-      dynamic responseHttp = await _httpAdapter.getRequest(
-        'official-joke-api.appspot.com',
-        '/random_ten',
-      );
-      List<dynamic> responseMap = convert.jsonDecode(responseHttp);
-      String dioResponseStr = convert.jsonEncode(response);
-      print('=====================> ${response}');
-      print('========>: $responseHttp');
-      print('==========>: ${responseMap[0]}');
-      print("RUNTIME TYPE =======================> ${response.runtimeType} : ${responseHttp.runtimeType} : ${responseMap.runtimeType} : ${dioResponseStr.runtimeType}");
-      print('=========> $dioResponseStr');
-      setState(() {
-        _hasLoaded = true;
-      });
-      if (loginStatus) {
-        _goToMainApp(context);
-      }
-    } catch (e) {
-      print("An error has occurred trying to load user on login: $e");
+    bool loginStatus = await _localStorage.getLoginStatus();
+    dynamic response = await _dioAdapter.getRequest(
+      'https://official-joke-api.appspot.com/random_ten',
+    );
+    dynamic responseHttp = await _httpAdapter.getRequest(
+      'official-joke-api.appspot.com',
+      '/random_ten',
+    );
+    List<dynamic> responseMapHttp = convert.jsonDecode(
+      responseHttp,
+    ); // convertir string to json
+    String responseStringDio = convert.jsonEncode(
+      response,
+    ); // convertir de json[MAP] a string
+    print('DIO: =====================> ${response}');
+    print('HTTP: =====================> ${responseHttp}');
+    print('HTTP CONVERTED: =====================> ${responseMapHttp}');
+    print('DIO CONVERTED: =====================> ${responseStringDio}');
+
+    print(
+      "RUNTIME TYPE =======================> ${response.runtimeType}: ${responseHttp.runtimeType}: ${responseMapHttp.runtimeType} : ${responseStringDio.runtimeType}",
+    );
+    print("=======> Response element 0 : ${response[0]["setup"]}");
+    setState(() {
+      _hasLoaded = true;
+    });
+    if (loginStatus) {
+      _goToMainApp(context);
     }
   }
 
