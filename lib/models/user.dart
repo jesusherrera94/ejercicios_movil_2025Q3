@@ -37,7 +37,8 @@ class User {
   // convertir de map a instancia de esta clase
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      username: map["id"] ?? '',
+      username: map["username"] ?? '',
+      id: map["id"] ?? '',
       fullname: map["fullname"] ?? '',
       email: map["email"] ?? '',
       password: map["password"] ?? '',
