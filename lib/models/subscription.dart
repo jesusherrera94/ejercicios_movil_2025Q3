@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum Period { DAILY, WEEKLY, MONTHLY, YEARLY }
+enum Period { NONE, DAILY, WEEKLY, MONTHLY, YEARLY }
 
 class Subscription {
   late String _id; // firebase!
@@ -8,7 +8,7 @@ class Subscription {
   late int _renovationDate; // fecha -> unix timestamp
   late Period _renovationCycle; // cada cuanto se paga la subscripcion, diarias, semanales, mensuales, anuales
   late double _charge; // dinero
-  late String _userId; // relacion a la tabla de usuarios
+  late String? _userId; // relacion a la tabla de usuarios
   IconData? _icon;
   String? _image;
 
@@ -18,7 +18,7 @@ class Subscription {
     required int renovationDate,
     required Period renovationCycle,
     required double charge,
-    required String userId,
+    String? userId,
     String? image,
   }){
     _id = id;
@@ -30,12 +30,32 @@ class Subscription {
     _image = image;
   }
 
+  set userId(String id) {
+    _userId = id;
+  }
+
+  set platformName(String name) {
+    _platformName = name;
+  }
+
+  set renovationDate(int date) {
+    _renovationDate = date;
+  }
+
+  set renovationCycle(Period cycle) {
+    _renovationCycle = cycle;
+  }
+
+  set charge(double charge) {
+    _charge = charge;
+  }
+
   String get id => _id;
   String get platformName => _platformName;
   int get renovationDate => _renovationDate;
   Period get renovationCycle => _renovationCycle;
   double get charge => _charge;
-  String get userId => _userId;
+  String get userId => _userId ?? '';
   IconData? get icon =>  _icon ??  Icons.calendar_view_month;
   String? get image => _image;
   
