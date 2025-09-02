@@ -27,7 +27,9 @@ class _MyBottomTabBarState extends State<MyBottomTabBar> {
     // si el indice es 0(equivalente a home) retorna el Floating action button, sino retorna nulo
     return index == 0
         ? FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, 'create-subscription');
+          },
           backgroundColor: Colors.blueAccent,
           shape: CircleBorder(), 
           child: Icon(Icons.add, color: Colors.white,))

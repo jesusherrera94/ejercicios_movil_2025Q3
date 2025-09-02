@@ -5,6 +5,7 @@ import './navigation/bottom_tab_bar.dart';
 import './navigation/tab_controller.dart';
 import './navigation/drawer.dart';
 import './screens/register.dart';
+import './screens/create_subscription.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
         "init": (context) => Login(),
         "main-app": (context) => MyBottomTabBar(),
         "register": (context) => Register(),
+        "create-subscription": (context) => CreateSubscription(),
       },
     );
   }
