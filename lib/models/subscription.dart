@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum Period { NONE, DAILY, WEEKLY, MONTHLY, YEARLY }
 
 class Subscription {
-  late String _id; // firebase!
+  late String? _id; // firebase!
   late String _platformName; // netflix, spotify, copilot, yt premium, etc...
   late int _renovationDate; // fecha -> unix timestamp
   late Period _renovationCycle; // cada cuanto se paga la subscripcion, diarias, semanales, mensuales, anuales
@@ -13,12 +13,12 @@ class Subscription {
   String? _image;
 
   Subscription({
-    required String id,
+    String? id,
     required String platformName,
     required int renovationDate,
     required Period renovationCycle,
     required double charge,
-    String? userId,
+    required String userId,
     String? image,
   }){
     _id = id;
@@ -50,7 +50,7 @@ class Subscription {
     _charge = charge;
   }
 
-  String get id => _id;
+  String get id => _id ?? '';
   String get platformName => _platformName;
   int get renovationDate => _renovationDate;
   Period get renovationCycle => _renovationCycle;
@@ -58,5 +58,31 @@ class Subscription {
   String get userId => _userId ?? '';
   IconData? get icon =>  _icon ??  Icons.calendar_view_month;
   String? get image => _image;
-  
+
+  // to map....
+  Map<String, dynamic> toMap(){
+    return {
+      "platformName": _platformName,
+      "renovationDate": _renovationDate,
+      "renovationCycle": _renovationCycle,
+      "charge": _charge,
+      "userId": _userId,
+      "icon": _icon
+    };
+  }
+
+  factory Subscription.fromMap(Map<String, dynamic> map) {
+    return Subscription(
+      id: map['id'] as String?,
+      platformName: map['platformName'] as String,
+      renovationDate: map['renovationDate'] as int,
+      renovationCycle: Period.values.firstWhere(
+        (e) => e.name == map['renovationCycle'],
+        orElse: () => Period.NONE
+      ),
+      charge: (map['charge'] as num).toDouble(),
+      userId: map['userId'] as String
+      );
+  }
+
 }
