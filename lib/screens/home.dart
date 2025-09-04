@@ -3,7 +3,8 @@ import '../models/subscription.dart';
 import '../widgets/subscription_item.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final ScrollController? scrollController;
+  const HomeScreen({super.key, this.scrollController});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -150,7 +151,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        Expanded(child: ListView(children: _renderItems())),
+        Expanded(
+          child: ListView(controller: widget.scrollController, children: _renderItems())),
       ],
     );
   }

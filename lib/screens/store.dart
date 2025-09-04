@@ -3,7 +3,8 @@ import '../models/subscription.dart';
 import '../widgets/store_items.dart';
 
 class StoreScreen extends StatefulWidget {
-  const StoreScreen({super.key});
+  final ScrollController? scrollController;
+  const StoreScreen({super.key, this.scrollController});
 
   @override
   State<StoreScreen> createState() => _StoreScreenState();
@@ -88,6 +89,7 @@ class _StoreScreenState extends State<StoreScreen> {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
+      controller: widget.scrollController,
       crossAxisCount: 2,
       crossAxisSpacing: 5,
       mainAxisSpacing: 10,

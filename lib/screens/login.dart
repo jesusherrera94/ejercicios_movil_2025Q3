@@ -3,6 +3,7 @@ import '../adapters/local_storage.dart';
 import '../adapters/dio_adapter.dart';
 import '../adapters/http_adapter.dart';
 import 'dart:convert' as convert;
+import '../widgets/wave_button.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -14,7 +15,6 @@ class _LoginState extends State<Login> {
   bool _hasLoaded = false;
   final DioAdapter _dioAdapter = DioAdapter();
   final HttpAdapter _httpAdapter = HttpAdapter();
-
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,6 @@ class _LoginState extends State<Login> {
     print('HTTP: =====================> ${responseHttp}');
     print('HTTP CONVERTED: =====================> ${responseMapHttp}');
     print('DIO CONVERTED: =====================> ${responseStringDio}');
-
     print(
       "RUNTIME TYPE =======================> ${response.runtimeType}: ${responseHttp.runtimeType}: ${responseMapHttp.runtimeType} : ${responseStringDio.runtimeType}",
     );
@@ -70,6 +69,10 @@ class _LoginState extends State<Login> {
     Navigator.pushNamed(context, 'register');
   }
 
+  void callbackMethod(String value) {
+    print('Hola Mundo!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! $value');
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!_hasLoaded) {
@@ -88,11 +91,14 @@ class _LoginState extends State<Login> {
                 children: [
                   Image.asset('assets/img/login_icon.png', width: 125.0),
                   SizedBox(height: 55.0),
-                  ElevatedButton(
-                    onPressed: () {
-                      doLogin(context);
-                    },
+                  WaveButton(
                     child: Text("Login"),
+                    onPressed: (value) {
+                      callbackMethod(value);
+                      _goToMainApp(context);
+                    },
+                    animationDuration: Duration(milliseconds: 300),
+                    waveColor: Colors.pinkAccent,
                   ),
                   SizedBox(height: 15),
                   GestureDetector(
