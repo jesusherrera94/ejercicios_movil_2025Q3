@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../adapters/local_storage.dart';
 import '../adapters/dio_adapter.dart';
-import '../adapters/http_adapter.dart';
 import 'dart:convert' as convert;
 import '../widgets/wave_button.dart';
 
@@ -14,7 +13,12 @@ class _LoginState extends State<Login> {
   final LocalStorage _localStorage = LocalStorage();
   bool _hasLoaded = false;
   final DioAdapter _dioAdapter = DioAdapter();
-  final HttpAdapter _httpAdapter = HttpAdapter();
+  final _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  String _email = '';
+  String _password = '';
+  String _error = '';
+
   @override
   void initState() {
     super.initState();
@@ -23,27 +27,6 @@ class _LoginState extends State<Login> {
 
   Future<void> loadUserDetails(BuildContext context) async {
     bool loginStatus = await _localStorage.getLoginStatus();
-    dynamic response = await _dioAdapter.getRequest(
-      'https://official-joke-api.appspot.com/random_ten',
-    );
-    dynamic responseHttp = await _httpAdapter.getRequest(
-      'official-joke-api.appspot.com',
-      '/random_ten',
-    );
-    List<dynamic> responseMapHttp = convert.jsonDecode(
-      responseHttp,
-    ); // convertir string to json
-    String responseStringDio = convert.jsonEncode(
-      response,
-    ); // convertir de json[MAP] a string
-    print('DIO: =====================> ${response}');
-    print('HTTP: =====================> ${responseHttp}');
-    print('HTTP CONVERTED: =====================> ${responseMapHttp}');
-    print('DIO CONVERTED: =====================> ${responseStringDio}');
-    print(
-      "RUNTIME TYPE =======================> ${response.runtimeType}: ${responseHttp.runtimeType}: ${responseMapHttp.runtimeType} : ${responseStringDio.runtimeType}",
-    );
-    print("=======> Response element 0 : ${response[0]["setup"]}");
     setState(() {
       _hasLoaded = true;
     });
@@ -53,11 +36,25 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> doLogin(BuildContext context) async {
-    try {
-      await _localStorage.setLoginStatus(true);
-      _goToMainApp(context);
+    if(_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      setState(() {
+        _error = '';
+        _isLoading = true;
+      });
+      try {
+      // await _localStorage.setLoginStatus(true);
+      // _goToMainApp(context);
     } catch (e) {
       print("An error has occurred trying to login!: $e");
+      setState(() {
+        _error = 'An error has occurred trying to login';
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
     }
   }
 
@@ -82,35 +79,78 @@ class _LoginState extends State<Login> {
       appBar: AppBar(title: Text("Login")),
       body: Center(
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.5,
+          height: MediaQuery.of(context).size.height * 0.7,
           width: MediaQuery.of(context).size.width * 0.9,
           child: Card(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset('assets/img/login_icon.png', width: 125.0),
-                  SizedBox(height: 55.0),
-                  WaveButton(
-                    child: Text("Login"),
-                    onPressed: (value) {
-                      callbackMethod(value);
-                      _goToMainApp(context);
-                    },
-                    animationDuration: Duration(milliseconds: 300),
-                    waveColor: Colors.pinkAccent,
+            child: Form(
+              key: _formKey,
+              child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset('assets/img/login_icon.png', width: 125.0),
+                      SizedBox(height: 55.0),
+                       TextFormField(
+                        decoration: const InputDecoration(labelText: 'Email'),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the Email';
+                          }
+                          if (!value.contains("@")) {
+                            return 'Please enter a valid Email';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _email = value!,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: 'Password',
+                        ),
+                        obscureText: true,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the Password';
+                          }
+                          if (value.length < 6) {
+                            return 'Password must be at least 6 characters long';
+                          }
+                          return null;
+                        },
+                        onSaved: (value) => _password = value!,
+                      ),
+                      if (_error.isNotEmpty) ...[
+                        SizedBox(height: 10,),
+                        Text(_error, style: TextStyle(color: Colors.redAccent),)
+                      ],
+                      SizedBox(height: 20),
+                      WaveButton(
+                        onPressed: (value) {
+                          if(!_isLoading){
+                            doLogin(context);
+                          }
+                        },
+                        animationDuration: Duration(milliseconds: 300),
+                        waveColor: Colors.pinkAccent,
+                        child: _isLoading? CircularProgressIndicator() : const Text("Login"),
+                      ),
+                      SizedBox(height: 15),
+                      GestureDetector(
+                        onTap: () {
+                          _goToRegister(context);
+                        },
+                        child: Text(
+                          "Have a user? Register",
+                          style: TextStyle(
+                            decoration: TextDecoration.underline,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: 15),
-                  GestureDetector(
-                    onTap: () {
-                      _goToRegister(context);
-                    },
-                    child: Text(
-                      "Have a user? Register",
-                      style: TextStyle(decoration: TextDecoration.underline),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
