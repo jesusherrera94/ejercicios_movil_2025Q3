@@ -6,6 +6,7 @@ import '../adapters/db.dart';
 import '../adapters/local_storage.dart';
 import '../models/user.dart';
 import '../state/subscriptions_state.dart';
+import '../adapters/notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final Db _db = Db();
   final LocalStorage _localStorage = LocalStorage();
   late User _user;
+  final Notifications _notifications = Notifications();
 
   @override
   void initState() {
@@ -61,6 +63,9 @@ class _HomeScreenState extends State<HomeScreen> {
         final idx = currentList.indexWhere((s) => s.id == sub.id);
         if (idx != -1) {
           currentList[idx] = sub;
+          _notifications.showNotification(
+            title: 'Subscriptions has changed',
+            body: 'Subscription ${sub.platformName} has changed');
         } else {
           currentList.add(sub);
         }
