@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import '../adapters/local_storage.dart';
 import '../adapters/dio_adapter.dart';
-import 'dart:convert' as convert;
 import '../widgets/wave_button.dart';
+import '../models/user.dart';
+import '../adapters/auth.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -43,6 +44,13 @@ class _LoginState extends State<Login> {
         _isLoading = true;
       });
       try {
+        dynamic loginUser = await Auth.signInWithEmailAndPassword(_email, _password);
+       String userUid = loginUser.user.uid;
+        dynamic response = await _dioAdapter.getRequest(
+        'https://subscriptions-be.vercel.app/api/users/$userUid',
+      );
+        User user = User.fromMap(response['user']);
+        await _localStorage.setUserData('user', user.toMapString());
       // await _localStorage.setLoginStatus(true);
       // _goToMainApp(context);
     } catch (e) {
