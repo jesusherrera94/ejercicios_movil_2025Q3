@@ -45,14 +45,13 @@ class _LoginState extends State<Login> {
       });
       try {
         dynamic loginUser = await Auth.signInWithEmailAndPassword(_email, _password);
-       String userUid = loginUser.user.uid;
-        dynamic response = await _dioAdapter.getRequest(
-        'https://subscriptions-be.vercel.app/api/users/$userUid',
-      );
+        print('=====> user info: ${loginUser.user}');
+        String userUid = loginUser.user.uid;
+        dynamic response = await _dioAdapter.getRequest('https://subscriptions-be.vercel.app/api/users/$userUid');
         User user = User.fromMap(response['user']);
         await _localStorage.setUserData('user', user.toMapString());
-      // await _localStorage.setLoginStatus(true);
-      // _goToMainApp(context);
+      await _localStorage.setLoginStatus(true);
+      _goToMainApp(context);
     } catch (e) {
       print("An error has occurred trying to login!: $e");
       setState(() {
