@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "501002168109",
+    "project_id": "subscriptions-app-4f2e3",
+    "storage_bucket": "subscriptions-app-4f2e3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501002168109:android:56bd160c97912354a295a4",
+        "android_client_info": {
+          "package_name": "com.ceutec.subscriptions"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJ79pESCQnhQt1U9CeNtEHrsZkNclPyFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
