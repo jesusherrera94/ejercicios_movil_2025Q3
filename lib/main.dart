@@ -6,8 +6,15 @@ import './navigation/tab_controller.dart';
 import './navigation/drawer.dart';
 import './screens/register.dart';
 import './screens/create_subscription.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
