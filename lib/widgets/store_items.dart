@@ -5,6 +5,7 @@ import '../models/user.dart';
 import '../adapters/local_storage.dart';
 import '../store/subscriptions_state.dart';
 import '../adapters/db.dart';
+import '../utils/time_utils.dart';
 
 class StoreItem extends StatelessWidget {
   final Subscription subscription;
@@ -18,7 +19,7 @@ class StoreItem extends StatelessWidget {
     final newSubscription = Subscription(
       id: '',
       platformName: subscription.platformName,
-      renovationDate: subscription.renovationDate,
+      renovationDate: addTimeToActualDate(DateTime.now(), subscription.renovationCycle),
       renovationCycle: subscription.renovationCycle,
       charge: subscription.charge,
       userId: user.uid!,
