@@ -8,12 +8,16 @@ import './screens/register.dart';
 import './screens/create_subscription.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
+  await Future.wait([
+    Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-    );
+    ),
+    Permission.notification.request()
+  ]);
   runApp(const MyApp());
 }
 
