@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import '../models/subscription.dart';
 import '../widgets/subscription_item.dart';
+import 'dart:convert' as convert;
+import '../adapters/db.dart';
+import '../adapters/local_storage.dart';
+import '../models/user.dart';
+import '../store/subscriptions_state.dart';
 
 class HomeScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -11,89 +16,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // listado temporal
   Period? _selectedFilter;
-  final List<Subscription> _subscriptions = [
-    Subscription(
-      id: '1',
-      platformName: 'Netflix',
-      renovationDate: 2148483647,
-      renovationCycle: Period.MONTHLY,
-      charge: 12.99,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '2',
-      platformName: 'Spotify',
-      renovationDate: 2147483647,
-      renovationCycle: Period.MONTHLY,
-      charge: 9.99,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '3',
-      platformName: 'Hulu',
-      renovationDate: 2147483647,
-      renovationCycle: Period.MONTHLY,
-      charge: 7.99,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '4',
-      platformName: 'Amazon Prime',
-      renovationDate: 2147483647,
-      renovationCycle: Period.YEARLY,
-      charge: 119.00,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '5',
-      platformName: 'YouTube Premium',
-      renovationDate: 2047483635,
-      renovationCycle: Period.MONTHLY,
-      charge: 11.99,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '6',
-      platformName: 'Github Copilot',
-      renovationDate: 2047483635,
-      renovationCycle: Period.YEARLY,
-      charge: 100.00,
-      userId: 'user123',
-    ),
-    Subscription(
-      id: '6',
-      platformName: 'Github Copilot',
-      renovationDate: 2047483635,
-      renovationCycle: Period.YEARLY,
-      charge: 100.00,
-      userId: 'user123',
-    ),
-  ];
+  bool _isLoading = false;
+  final Db _db = Db();
+  final LocalStorage _localStorage = LocalStorage();
+  late User _user;
 
-  List<Subscription> _filteredSubscriptions = [];
+  @override
+  void initState() {
+    super.initState();
+    _loadSubscriptions();
+  }
 
-  List<Widget> _renderItems() {
-    List<Widget> subscriptionWidget = [];
-    if (_selectedFilter == null) { // no hay filtros seleccionados
-      for (final subscription in _subscriptions) {
-        subscriptionWidget.add(
-          SubscriptionItem(subscriptionItem: subscription),
-        );
-      }
-    } else { // algun fultro se selecciono
-      _filteredSubscriptions = _subscriptions.where((subscription) {
-        return subscription.renovationCycle == _selectedFilter;
-      }).toList();
-      for (final subscription in _filteredSubscriptions) {
-        subscriptionWidget.add(
-          SubscriptionItem(subscriptionItem: subscription),
-        );
-      }
-      setState(() {});
+  Future<void> _loadSubscriptions() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final userString = await _localStorage.getUserData('user');
+      _user = User.fromMap(convert.jsonDecode(userString));
+      final subscriptions = await _db.getSubscriptions(_user.uid!);
+      subscriptionsNotifier.value = subscriptions
+          .map((s) => Subscription.fromMap(s))
+          .toList();
+    } catch (error) {
+      print('Error loading subscriptions: $error');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
-    return subscriptionWidget;
   }
 
   void _onApplyFilters(Period? period) {
@@ -104,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return Column(
       children: [
         Row(
@@ -152,7 +109,31 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         Expanded(
-          child: ListView(controller: widget.scrollController, children: _renderItems())),
+          child: ValueListenableBuilder<List<Subscription>>(
+            valueListenable: subscriptionsNotifier,
+            builder: (context, subscriptions, _) {
+              final filtered = _selectedFilter == null
+                  ? subscriptions
+                  : subscriptions
+                        .where((s) => s.renovationCycle == _selectedFilter)
+                        .toList();
+              if (filtered.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No subscription found',
+                    style: TextStyle(fontSize: 18, color: Colors.grey),
+                  ),
+                );
+              }
+              return ListView(
+                controller: widget.scrollController,
+                children: filtered
+                    .map((s) => SubscriptionItem(subscriptionItem: s))
+                    .toList(),
+              );
+            },
+          ),
+        ),
       ],
     );
   }
