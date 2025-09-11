@@ -91,7 +91,7 @@ class _MyBottomTabBarState extends State<MyBottomTabBar>
     case 1:
       return StoreScreen(scrollController: _scrollController);
     case 2:
-      return ProfileScreen();
+      return ProfileScreen(scrollController: _scrollController);
     default:
       return HomeScreen(scrollController: _scrollController);
   }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../models/user.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final ScrollController? scrollController;
+  const ProfileScreen({super.key, this.scrollController});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -33,15 +34,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     const baseBlue = Color.fromARGB(255, 69, 137, 255);
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        backgroundColor: baseBlue,
-        title: const Text('Perfil'),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
+    return  SingleChildScrollView(
+      controller: widget.scrollController,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Card(
@@ -129,9 +123,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     onPressed: () {
                       // aquí podrías abrir edición si quieres más adelante
                     },
-                    icon: const Icon(Icons.edit, color: Colors.black),
+                    icon: const Icon(Icons.logout, color: Colors.black),
                     label: const Text(
-                      'Editar perfil',
+                      'Logout',
                       style: TextStyle(color: Colors.black),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -150,7 +144,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 }
