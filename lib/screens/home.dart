@@ -47,6 +47,23 @@ class _HomeScreenState extends State<HomeScreen> {
         _isLoading = false;
       });
     }
+    _listenChanges();
+  }
+
+  void _listenChanges() {
+    _db.setListenerToSubscription(
+      onSubscriptionRecieved: (data) {
+        final sub = Subscription.fromMap(data);
+        final currentList = List<Subscription>.from(subscriptionsNotifier.value);
+        final idx = currentList.indexWhere((s) => s.id == sub.id);
+        if (idx != -1) {
+          currentList[idx] = sub;
+        } else {
+          currentList.add(sub);
+        }
+        subscriptionsNotifier.value = currentList;
+      },
+    );
   }
 
   void _onApplyFilters(Period? period) {
