@@ -5,7 +5,7 @@ import 'dart:convert' as convert;
 import '../adapters/db.dart';
 import '../adapters/local_storage.dart';
 import '../models/user.dart';
-import '../state/subscriptions_state.dart';
+import '../store/subscriptions_state.dart';
 
 class HomeScreen extends StatefulWidget {
   final ScrollController? scrollController;
@@ -16,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // listado temporal
   Period? _selectedFilter;
   bool _isLoading = false;
   final Db _db = Db();
@@ -37,9 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final userString = await _localStorage.getUserData('user');
       _user = User.fromMap(convert.jsonDecode(userString));
-
       final subscriptions = await _db.getSubscriptions(_user.uid!);
-
       subscriptionsNotifier.value = subscriptions
           .map((s) => Subscription.fromMap(s))
           .toList();
@@ -129,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
               return ListView(
+                controller: widget.scrollController,
                 children: filtered
                     .map((s) => SubscriptionItem(subscriptionItem: s))
                     .toList(),
