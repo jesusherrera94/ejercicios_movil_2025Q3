@@ -11,9 +11,9 @@ class StoreItem extends StatelessWidget {
   const StoreItem({super.key, required this.subscription});
 
   Future<void> _addToMySubscriptions(BuildContext context) async {
-    final LocalStorage _localStorage = LocalStorage();
-    final userString = await _localStorage.getUserData('user');
-    final User _user = User.fromMap(convert.jsonDecode(userString));
+    final LocalStorage localStorage = LocalStorage();
+    final userString = await localStorage.getUserData('user');
+    final User user = User.fromMap(convert.jsonDecode(userString));
     final Db db = Db();
     final newSubscription = Subscription(
       id: '',
@@ -21,7 +21,7 @@ class StoreItem extends StatelessWidget {
       renovationDate: subscription.renovationDate,
       renovationCycle: subscription.renovationCycle,
       charge: subscription.charge,
-      userId: _user.uid!,
+      userId: user.uid!,
       image: subscription.image,
     );
     dynamic response = await db.saveSubscription(newSubscription.toMap());
