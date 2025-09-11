@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../models/user.dart';
-
+import '../adapters/local_storage.dart';
+import 'dart:convert' as convert;
+import '../adapters/auth.dart';
 class ProfileScreen extends StatefulWidget {
   final ScrollController? scrollController;
   const ProfileScreen({super.key, this.scrollController});
@@ -11,6 +13,27 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
 
+  late User user;
+  final LocalStorage _localStorage = LocalStorage();
+  bool _isLoading = true;
+  
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    setState(() {
+      _isLoading = true;
+    });
+    final userString = await _localStorage.getUserData('user');
+    user = User.fromMap(convert.jsonDecode(userString));
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   String _initials(String fullname) {
     final parts = fullname.trim().split(' ');
     if (parts.isEmpty) return '';
@@ -18,20 +41,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return (parts.first[0] + parts.last[0]).toUpperCase();
   }
 
+  void _logout(BuildContext context) async {
+    await Auth.signOut();
+    await _localStorage.setLoginStatus(false);
+    await _localStorage.setUserData('user', '');
+    Navigator.pushReplacementNamed(context, 'init');
+  }
+
   @override
   Widget build(BuildContext context) {
-    // --- Aquí pones los datos del usuario ---
-    final user = User(
-      username: 'Valeria',
-      fullname: 'Valeria Cruz',
-      email: 'valeria_cruz@unitec.edu',
-      principalInterest: 'Tarea1',
-      password: '',
-      profilePicture:
-          '', // si quieres usar asset pon 'assets/img/login_icon.png'
-    );
-    // ----------------------------------------
-
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
     const baseBlue = Color.fromARGB(255, 69, 137, 255);
 
     return  SingleChildScrollView(
@@ -54,7 +75,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     backgroundColor: baseBlue,
                     child: () {
                       if (user.profilePicture != null &&
-                          user.profilePicture!.isNotEmpty) {
+                          user.profilePicture!.isNotEmpty &&
+                          !user.profilePicture!.contains('example.com')) {
                         final src = user.profilePicture!;
                         final img =
                             src.startsWith('assets/')
@@ -121,7 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 12),
                   ElevatedButton.icon(
                     onPressed: () {
-                      // aquí podrías abrir edición si quieres más adelante
+                      _logout(context);
                     },
                     icon: const Icon(Icons.logout, color: Colors.black),
                     label: const Text(
