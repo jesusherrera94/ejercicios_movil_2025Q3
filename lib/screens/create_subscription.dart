@@ -3,6 +3,8 @@ import 'dart:convert' as convert;
 import '../models/subscription.dart';
 import '../models/user.dart';
 import '../adapters/local_storage.dart';
+import '../store/subscriptions_state.dart';
+import '../adapters/db.dart';
 
 class CreateSubscription extends StatefulWidget {
   const CreateSubscription({super.key});
@@ -16,6 +18,7 @@ class _CreateSubscriptionState extends State<CreateSubscription> {
   bool _isLoading = false;
   final LocalStorage _localStorage = LocalStorage();
   late User _user;
+  final Db _db = Db();
 
   Subscription _newSubscription = Subscription(
     id: '',
@@ -52,10 +55,13 @@ class _CreateSubscriptionState extends State<CreateSubscription> {
         _isLoading = true;
       });
       _newSubscription.userId = _user.uid!;
-      print(
-        'New subscription: ${_newSubscription.platformName}, ${_newSubscription.renovationDate}, ${_newSubscription.renovationCycle}, ${_newSubscription.charge}, userId: ${_newSubscription.userId}',
-      );
-      print('New Subscription toMap: ${_newSubscription.toMap()}');
+      dynamic response = await _db.saveSubscription(_newSubscription.toMap());
+      print('Subscription created!!!!!!!!!!! ${response.id}');
+      final newSub = Subscription.fromMap({
+        "id": response.id,
+        ...response.data(),
+      });
+      subscriptionsNotifier.value = [...subscriptionsNotifier.value, newSub];
       setState(() {
         _isLoading = false;
       });
