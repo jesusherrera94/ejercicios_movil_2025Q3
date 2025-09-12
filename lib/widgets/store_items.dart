@@ -1,9 +1,39 @@
 import 'package:flutter/material.dart';
 import '../models/subscription.dart';
+import 'dart:convert' as convert;
+import '../models/user.dart';
+import '../adapters/local_storage.dart';
+import '../store/subscriptions_state.dart';
+import '../adapters/db.dart';
 
 class StoreItem extends StatelessWidget {
   final Subscription subscription;
   const StoreItem({super.key, required this.subscription});
+
+  Future<void> _addToMySubscriptions(BuildContext context) async {
+    final LocalStorage localStorage = LocalStorage();
+    final userString = await localStorage.getUserData('user');
+    final User user = User.fromMap(convert.jsonDecode(userString));
+    final Db db = Db();
+    final newSubscription = Subscription(
+      id: '',
+      platformName: subscription.platformName,
+      renovationDate: subscription.renovationDate,
+      renovationCycle: subscription.renovationCycle,
+      charge: subscription.charge,
+      userId: user.uid!,
+      image: subscription.image,
+    );
+    dynamic response = await db.saveSubscription(newSubscription.toMap());
+    final newSub = Subscription.fromMap({
+        "id": response.id,
+        ...response.data(),
+      });
+    subscriptionsNotifier.value = [...subscriptionsNotifier.value, newSub];
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Subscription added to your list'))
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +85,7 @@ class StoreItem extends StatelessWidget {
             ],
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () { _addToMySubscriptions(context); },
             icon: Icon(Icons.add_shopping_cart, color: Colors.blueAccent),
           ),
         ],
