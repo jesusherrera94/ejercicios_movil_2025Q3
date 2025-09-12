@@ -5,6 +5,7 @@ import '../models/user.dart';
 import '../adapters/local_storage.dart';
 import '../store/subscriptions_state.dart';
 import '../adapters/db.dart';
+import '../utils/time_utils.dart';
 
 class CreateSubscription extends StatefulWidget {
   const CreateSubscription({super.key});
@@ -55,6 +56,8 @@ class _CreateSubscriptionState extends State<CreateSubscription> {
         _isLoading = true;
       });
       _newSubscription.userId = _user.uid!;
+      _newSubscription.renovationDate =
+          addTimeToActualDate(DateTime.now(), _newSubscription.renovationCycle);
       dynamic response = await _db.saveSubscription(_newSubscription.toMap());
       print('Subscription created!!!!!!!!!!! ${response.id}');
       final newSub = Subscription.fromMap({
@@ -101,19 +104,6 @@ class _CreateSubscriptionState extends State<CreateSubscription> {
                         },
                         onSaved: (value) =>
                             _newSubscription.platformName = value!,
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                          labelText: 'Renovation Date',
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter Renovation date';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) =>
-                            _newSubscription.renovationDate = int.parse(value!),
                       ),
                       DropdownButtonFormField<Period>(
                         decoration: const InputDecoration(
